@@ -44,7 +44,7 @@ class TicketMail extends Mailable
     public function content()
     {
         return new Content(
-            view: 'view.name',
+            view: 'Email.ticket',
             with: [
                 'uuid' => $this->ticket->uniqueCode,
                

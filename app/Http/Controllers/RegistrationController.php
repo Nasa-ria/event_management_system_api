@@ -32,11 +32,14 @@ class RegistrationController extends Controller
             'contact'=>'required',
             'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
+            'attendees'=>'required',
 
         ]);
 
         $event= Event::create([
             'event_name' => request()->event_name,
+            'attendees' => request()->attendees,
+            'contact' => request()->contact,
             'email' => request()->email,
             'password' => Hash::make($request['password']),
 

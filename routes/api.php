@@ -22,3 +22,4 @@ use Illuminate\Support\Facades\Route;
 Route::post('registration', [RegistrationController::class,'Registration'])->name('registration');
 Route::post('signin', [RegistrationController::class,'SignIn'])->name('signin');
 Route::get('index', [RegistrationController::class,'index'])->name('index');
+Route::get('/generate-barcode', [ProductController::class, 'index'])->name('generate.barcode');

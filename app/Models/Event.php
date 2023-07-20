@@ -15,11 +15,12 @@ class Event extends Model
         'email',
         'password',
         'contact',
+        'attendees'
     ];
 
-    // protected $hidden = [
-    //     'password',
-    //     'remember_token',
-    // ];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
 }
