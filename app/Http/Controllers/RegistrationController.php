@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Event;
 use App\Mail\EventMail;
 use Illuminate\Http\Request;
@@ -11,57 +12,55 @@ use Illuminate\Support\Facades\Mail;
 
 class RegistrationController extends Controller
 {
-    public function SignIn(Request $request)
+    public function signIn(Request $request)
     {
         $request->validate([
             'email' => 'required',
             'password' => 'required',
         ]);
         $credentials = $request->only('email', 'password');
-        // dd(Auth::attempt($credentials));
-        if (Auth::attempt($credentials)) {
+        if (auth('web')->attempt($credentials)) {
+            $user = auth('web')->user();
+            return $user;
             return "login successfully";
+        } else {
+            return "fail";
         }
-        return "fail";
+        
     }
 
-    public function Registration(Request $request){
+    public function registration(Request $request){
        
-        $request->validate([
-            'event_name' => 'required',
-            'contact'=>'required',
-            'email' => 'required|email',
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required',
             'password' => 'required|min:8|confirmed',
-            'attendees'=>'required',
 
         ]);
 
-        $event= Event::create([
-            'event_name' => request()->event_name,
-            'attendees' => request()->attendees,
-            'contact' => request()->contact,
-            'email' => request()->email,
-            'password' => Hash::make($request['password']),
-
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($request->password)
         ]);
-        $token = $event->createToken("events");
+        $token = $user->createToken("nasa");
         $accessToken = $token->accessToken;
-                 $mail = $request->email;       
-    $mail= Mail::to($mail)->send(new EventMail());
+                //  $mail = $request->email;       
+    // $mail= Mail::to($mail)->send(new EventMail());
         
 
         // /**
         //  * Check if the email has been sent successfully, or not.
         //  * Return the appropriate message.
         //  */
-        if($mail){
+        // if($mail){
         return response()->json([
-            'data' => $event->refresh(),
+            'data' => $user->refresh(),
             'token' => $accessToken,
-            "Email has been sent successfully."
+            // "Email has been sent successfully."
         ]);
-        }
-        return "Oops! There was some error sending the email.";
+        // }
+        // return "Oops! There was some error sending the email.";
     }
     
     public function index(){

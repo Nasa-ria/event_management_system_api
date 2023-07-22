@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::post('registration', [RegistrationController::class,'Registration'])->name('registration');
-Route::post('signin', [RegistrationController::class,'SignIn'])->name('signin');
+Route::post('registration', [RegistrationController::class,'registration'])->name('registration');
+Route::post('signin', [RegistrationController::class,'signIn'])->name('signin');
 Route::get('index', [RegistrationController::class,'index'])->name('index');
 Route::get('/generate-barcode', [ProductController::class, 'index'])->name('generate.barcode');
