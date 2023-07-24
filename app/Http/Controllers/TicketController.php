@@ -18,11 +18,12 @@ class TicketController extends Controller
         ]);
         $ticket = Ticket::create([
             'event_name' => request()->event_name,
-            $ticket['event_id'] = $event->id
+            'event_id' => $event->id
         ]);
           return $ticket;
 
     }
+
     public  function purchaseTicket(Request $request, Event $event){
         $quantity = $request->input('quantity');
         $email = $request->input('email');
@@ -31,8 +32,7 @@ class TicketController extends Controller
             for ($x = 0; $x < $quantity ; $x++) {
                 $ticket = $this-> createTicket($request, $event);
             //   create uuid
-            $ticketCode[] =Str::uuid();;
-                // updating balance
+            $ticketCode[] =Str::uuid();
                 $ticket->update([
                     'status' => "purchase",
                     'email' => $email,
@@ -49,5 +49,10 @@ class TicketController extends Controller
 
     }
 
-
+    public function events(){
+        $events=  Event::all();
+         return response()->json([
+            "users"=>$events,
+         ]);
+    }
 }

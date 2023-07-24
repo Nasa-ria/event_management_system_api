@@ -15,16 +15,14 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('event_name');
-            // $table->string('user_email');
+            $table->string('event');
             $table->string('email')->unique();
-            $table->bigInteger('attendees');
             $table->timestamp('email_verified_at')->nullable();
+            $table->Integer('attendees');
             $table->string('contact');
-            $table->string('password');
+            $table->unsignedBigInteger('user_id');
             $table->rememberToken();
             $table->timestamps();
-        
         });
     }
 
@@ -35,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('event_registration');
+        Schema::dropIfExists('events');
     }
 };

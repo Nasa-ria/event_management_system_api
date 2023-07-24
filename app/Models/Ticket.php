@@ -13,6 +13,12 @@ class Ticket extends Model
         'email',
         // 'status',
         // 'uniquecode',
-        // 'event_id'
+        'event_id'
     ];
+    public function Event()
+    {
+        $event= $this->hasMany(Event::class,'event_id','id');
+
+        return $event;
+    }
 }

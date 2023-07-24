@@ -21,8 +21,8 @@ class RegistrationController extends Controller
         $credentials = $request->only('email', 'password');
         if (auth('web')->attempt($credentials)) {
             $user = auth('web')->user();
+            
             return $user;
-            return "login successfully";
         } else {
             return "fail";
         }
@@ -43,30 +43,44 @@ class RegistrationController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($request->password)
         ]);
-        $token = $user->createToken("nasa");
+        $token = $user->createToken("User");
         $accessToken = $token->accessToken;
-                //  $mail = $request->email;       
-    // $mail= Mail::to($mail)->send(new EventMail());
-        
-
-        // /**
-        //  * Check if the email has been sent successfully, or not.
-        //  * Return the appropriate message.
-        //  */
-        // if($mail){
         return response()->json([
             'data' => $user->refresh(),
             'token' => $accessToken,
-            // "Email has been sent successfully."
         ]);
-        // }
-        // return "Oops! There was some error sending the email.";
+    
     }
     
-    public function index(){
-        $events=  Event::all();
-        return response()->json([
-           "users"=>$events,
+   
+
+    public function eventRegistration(Request $request , User $user){
+        $validated = $request->validate([
+            'event' => 'required|string',
+            'email' => 'required',
+            'attendees' => 'required',
+            'contact' =>'required'
+
         ]);
+
+        $event = Event::create([
+            'user_id' => $user->id, // Corrected the assignment of user_id
+            'event' => $validated['event'],
+            'email' => $validated['email'],
+            'attendees' => $validated['attendees'],
+            'contact' => $validated['contact'],
+           
+        ]);
+        $email = $validated['email'];
+        Mail::to($email)->send(new EventMail());
+        return response()->json([
+            "event"=>$event,
+         ]);
+     }
+     public function users(){
+        $users=  User::all();
+         return response()->json([
+            "users"=>$users,
+         ]);
     }
 }
