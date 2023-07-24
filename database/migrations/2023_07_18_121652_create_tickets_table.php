@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('event_name');
             $table->string('status')->default('unpurchase');
             $table->unsignedBigInteger('event_id');
-            $table->string('uniqueCode');
+            $table->json('uniqueCode')->nullable();
             $table->timestamps();
         });
     }

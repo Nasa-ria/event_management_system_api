@@ -21,16 +21,22 @@ class RegistrationController extends Controller
         $credentials = $request->only('email', 'password');
         if (auth('web')->attempt($credentials)) {
             $user = auth('web')->user();
+          
+            $token = $user->createToken("User")->accessToken;
             
-            return $user;
+            return response()->json([
+                'data' => $user->refresh(),
+                'token' => $token,
+            ]);
+            // return $user;
         } else {
             return "fail";
         }
-        
     }
 
-    public function registration(Request $request){
-       
+    public function registration(Request $request)
+    {
+
         $validated = $request->validate([
             'name' => 'required|string',
             'email' => 'required',
@@ -49,38 +55,47 @@ class RegistrationController extends Controller
             'data' => $user->refresh(),
             'token' => $accessToken,
         ]);
-    
     }
-    
-   
 
-    public function eventRegistration(Request $request , User $user){
+
+
+    public function eventRegistration(Request $request )
+    {
+        $user= $request->user()->id;
+        // dd($request->all());
+
         $validated = $request->validate([
             'event' => 'required|string',
             'email' => 'required',
             'attendees' => 'required',
-            'contact' =>'required'
+            'contact' => 'required',
+            'date' => 'required',
+            'location' => 'required'
 
         ]);
 
+
         $event = Event::create([
-            'user_id' => $user->id, // Corrected the assignment of user_id
+            'user_id' => $user, // Corrected the assignment of user_id
             'event' => $validated['event'],
             'email' => $validated['email'],
             'attendees' => $validated['attendees'],
             'contact' => $validated['contact'],
-           
+            'date' => $validated['date'],
+            'location' => $validated['location']
+
         ]);
         $email = $validated['email'];
         Mail::to($email)->send(new EventMail());
         return response()->json([
-            "event"=>$event,
-         ]);
-     }
-     public function users(){
-        $users=  User::all();
-         return response()->json([
-            "users"=>$users,
-         ]);
+            "event" => $event,
+        ]);
+    }
+    public function users()
+    {
+        $users =  User::all();
+        return response()->json([
+            "users" => $users,
+        ]);
     }
 }

@@ -16,12 +16,17 @@ use App\Http\Controllers\RegistrationController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
 
+Route::middleware(['auth:api'])->group(function () {
+    Route::post('eventRegistration', [RegistrationController::class,'eventRegistration'])->name('eventRegistration');
+});
+    
+
+
 Route::post('registration', [RegistrationController::class,'registration'])->name('registration');
-Route::post('eventRegistration/{user}', [RegistrationController::class,'eventRegistration'])->name('eventRegistration');
 Route::post('signin', [RegistrationController::class,'signIn'])->name('signin');
 Route::get('index', [RegistrationController::class,'users'])->name('index');
 // ticket

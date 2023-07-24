@@ -25,28 +25,36 @@ class TicketController extends Controller
     }
 
     public  function purchaseTicket(Request $request, Event $event){
-        $quantity = $request->input('quantity');
-        $email = $request->input('email');
+        // $quantity = $request->input('quantity');
+        // $email = $request->input('email');
+        $request->validate([
+            'quantity' => 'required',
+            'email' => 'required',
+        ]);
+        
+        $ticketCode = [];
+        for ($x = 0; $x < $request->quantity; $x++) {
+            $ticket = $this->createTicket($request, $event);
+            // Create uuid
+            $ticketCode[] = Str::uuid();
+    $uniqueCode = array_push($ticketCode); // Generate a unique code as a string
 
-          $ticketCode =[];
-            for ($x = 0; $x < $quantity ; $x++) {
-                $ticket = $this-> createTicket($request, $event);
-            //   create uuid
-            $ticketCode[] =Str::uuid();
-                $ticket->update([
-                    'status' => "purchase",
-                    'email' => $email,
-                    'uniqueCode'=>$ticketCode
-                ]);
-
-                $event->decrement('attendees');
-         
-                Mail::to($email)->send(new TicketMail($ticket));
-                if($event->attendees == 0){
-                    return "sold out";
-                }
-              }
-
+            $ticket->status = "purchase"; // Set the status attribute
+            $ticket->email = $request->email; // Set the email attribute
+            $ticket->uniqueCode = json_encode( $ticketCode); // Set the uniqueCode attribute
+            $ticket->save(); // Save the changes to the ticket
+        
+            $ticketCode[] = $uniqueCode; // Store the uniqueCode in the array for later use
+        
+            $event->decrement('attendees');
+            if ($event->attendees == 0) {
+                return "sold out";
+            }
+        }
+        
+        $email = $request->email;
+        Mail::to($email)->send(new TicketMail($ticket,$event));
+        return $ticket;
     }
 
     public function events(){

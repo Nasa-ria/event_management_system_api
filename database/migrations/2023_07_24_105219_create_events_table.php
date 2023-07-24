@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('event');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->Integer('attendees');
             $table->string('contact');
+            $table->date('date');
+            $table->string('location');
             $table->unsignedBigInteger('user_id');
             $table->rememberToken();
             $table->timestamps();
