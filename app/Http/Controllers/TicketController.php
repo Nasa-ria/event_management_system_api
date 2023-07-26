@@ -15,19 +15,24 @@ class TicketController extends Controller
 
     private function createTicket(Request $request){
         $user= $request->user()->id;
-        // $event = Event::where('user_id' ,'=' ,$user)->get();
-
         $request->validate([
             'event_name' => 'required',
         ]);
-        $event = Event::where('event', '=', request()->event_name)->first();
-        $id = $event->id;
-
+    
+        // Fetch the event based on the event name
+        $event = Event::where('event', '=', $request->event_name)->first();
+    
+        if (!$event) {
+            // Handle the case where the event is not found
+            return response()->json(['message' => 'Event not found'], 404);
+        }
+    
         $ticket = Ticket::create([
-            'event_name' => request()->event_name,
-            'event_id' =>  $id
+            'event_name' => $request->event_name,
+            'event_id' => $event->id
         ]);
-          return $ticket;
+    
+        return $ticket;
 
     }
 

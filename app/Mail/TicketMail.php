@@ -36,6 +36,7 @@ class TicketMail extends Mailable
     {
         return new Envelope(
             subject: 'Ticket Mail',
+         
         );
     }
 
@@ -49,7 +50,10 @@ class TicketMail extends Mailable
         return new Content(
             view: 'Email.ticket',
             with: [
-                'message' => $this->ticket,
+                'uniqueCode' => $this->ticket->uniqueCode,
+                'event'=> $this->event->event,
+                'date'=> $this->event->date,
+                'location'=> $this->event->location,
                
             ],
         );

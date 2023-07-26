@@ -13,7 +13,7 @@
             <p>Hello,</p>
             <p>Thank you for purchasing a ticket to our event! Below is your ticket information:</p>
             <ul>
-                <li><strong>Event Name:</strong> {{ $event->name }}</li>
+                <li><strong>Event Name:</strong> {{ $event->event }}</li>
                 <li><strong>Date:</strong> {{ $event->date }}</li>
                 <li><strong>Location:</strong> {{ $event->location }}</li>
                 <li><strong>Ticket Code:</strong>  @foreach (json_decode($ticket->uniqueCode) as $code)

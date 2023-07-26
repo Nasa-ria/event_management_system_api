@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
-class RegistrationController extends Controller
+class UserController extends Controller
 {
     public function signIn(Request $request)
     {
@@ -59,39 +59,7 @@ class RegistrationController extends Controller
 
 
 
-    public function eventRegistration(Request $request )
-    {
-        $user= $request->user();
-        $id = $user->id;
-
-        $validated = $request->validate([
-            'event' => 'required|string',
-            'email' => 'required',
-            'attendees' => 'required',
-            'contact' => 'required',
-            'date' => 'required',
-            'location' => 'required'
-
-        ]);
-
-
-        $event = Event::create([
-            'user_id' => $id, // Corrected the assignment of user_id
-            'event' => $validated['event'],
-            'email' => $validated['email'],
-            'attendees' => $validated['attendees'],
-            'contact' => $validated['contact'],
-            'date' => $validated['date'],
-            'location' => $validated['location']
-
-        ]);
-        // dd($event);
-        $email = $event->email;
-        Mail::to($email)->send(new EventMail( $event,$user));
-        return response()->json([
-            "event" => $event,
-        ]);
-    }
+    
     public function users()
     {
         $users =  User::all();

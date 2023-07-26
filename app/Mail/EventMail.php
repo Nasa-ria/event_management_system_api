@@ -49,6 +49,14 @@ class EventMail extends Mailable
     {
          return new Content(
             view: 'email.event ',
+            with: [
+                'contact' => $this->event->contact,
+                'event'=> $this->event->event,
+                'date'=> $this->event->date,
+                'location'=> $this->event->location,
+                'attendees' => $this->event->attendees,
+               
+            ],
       
         );
     }

@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\RegistrationController;
 
@@ -21,16 +23,17 @@ use App\Http\Controllers\RegistrationController;
 // });
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::post('eventRegistration', [RegistrationController::class,'eventRegistration'])->name('eventRegistration');
+    Route::post('eventRegistration', [EventController::class,'eventRegistration'])->name('eventRegistration');
     Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
+    Route::get('events', [TicketController::class,'events'])->name('events');
 });
     
 
 
-Route::post('registration', [RegistrationController::class,'registration'])->name('registration');
-Route::post('signin', [RegistrationController::class,'signIn'])->name('signin');
-Route::get('index', [RegistrationController::class,'users'])->name('index');
+Route::post('registration', [UserController::class,'registration'])->name('registration');
+Route::post('signin', [UserController::class,'signIn'])->name('signin');
+Route::get('index', [UserController::class,'users'])->name('index');
 // ticket
 
-Route::get('events', [TicketController::class,'events'])->name('events');
+
 // Route::get('/generate-barcode', [ProductController::class, 'index'])->name('generate.barcode');
