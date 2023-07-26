@@ -22,6 +22,7 @@ use App\Http\Controllers\RegistrationController;
 
 Route::middleware(['auth:api'])->group(function () {
     Route::post('eventRegistration', [RegistrationController::class,'eventRegistration'])->name('eventRegistration');
+    Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
 });
     
 
@@ -30,6 +31,6 @@ Route::post('registration', [RegistrationController::class,'registration'])->nam
 Route::post('signin', [RegistrationController::class,'signIn'])->name('signin');
 Route::get('index', [RegistrationController::class,'users'])->name('index');
 // ticket
-Route::post('purchaseTicket/{event}', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
+
 Route::get('events', [TicketController::class,'events'])->name('events');
 // Route::get('/generate-barcode', [ProductController::class, 'index'])->name('generate.barcode');

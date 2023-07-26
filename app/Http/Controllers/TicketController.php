@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Ticket;
 use App\Mail\TicketMail;
+use App\Models\User; 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -12,21 +13,25 @@ use Illuminate\Support\Facades\Mail;
 class TicketController extends Controller
 { 
 
-    private function createTicket(Request $request, Event $event){
+    private function createTicket(Request $request){
+        $user= $request->user()->id;
+        // $event = Event::where('user_id' ,'=' ,$user)->get();
+
         $request->validate([
             'event_name' => 'required',
         ]);
+        $event = Event::where('event', '=', request()->event_name)->first();
+        $id = $event->id;
+
         $ticket = Ticket::create([
             'event_name' => request()->event_name,
-            'event_id' => $event->id
+            'event_id' =>  $id
         ]);
           return $ticket;
 
     }
 
-    public  function purchaseTicket(Request $request, Event $event){
-        // $quantity = $request->input('quantity');
-        // $email = $request->input('email');
+    public  function purchaseTicket(Request $request){
         $request->validate([
             'quantity' => 'required',
             'email' => 'required',
@@ -34,7 +39,7 @@ class TicketController extends Controller
         
         $ticketCode = [];
         for ($x = 0; $x < $request->quantity; $x++) {
-            $ticket = $this->createTicket($request, $event);
+            $ticket = $this->createTicket($request);
             // Create uuid
             $ticketCode[] = Str::uuid();
     $uniqueCode = array_push($ticketCode); // Generate a unique code as a string
@@ -46,6 +51,8 @@ class TicketController extends Controller
         
             $ticketCode[] = $uniqueCode; // Store the uniqueCode in the array for later use
         
+            // $user= $request->user()->id;
+            $event = Event::where('event', '=', request()->event_name)->first();
             $event->decrement('attendees');
             if ($event->attendees == 0) {
                 return "sold out";

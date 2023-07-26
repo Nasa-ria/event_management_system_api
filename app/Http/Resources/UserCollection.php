@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class TicketCollection extends ResourceCollection
+class UserCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -16,7 +16,7 @@ class TicketCollection extends ResourceCollection
     {
         // return parent::toArray($request);
         return[
-            'data' => TicketResource::collection($this->collection)
+            'data' => UserResource::collection($this->collection)
         ];
     }
 }

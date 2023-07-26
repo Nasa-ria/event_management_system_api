@@ -2,17 +2,20 @@
 
 namespace App\Mail;
 
+use App\Models\User;
+use App\Models\Event;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class EventMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $data;
+    public $event;
+    public $user;
 
     /**
      * Create a new message instance.
@@ -20,9 +23,10 @@ class EventMail extends Mailable
      * @return void
      */
     
-    public function __construct()
+    public function __construct(Event $event, User $user)
     {
-        // $this->data=$data   ; 
+        $this->event = $event;
+        $this->user = $user;
     }
     /**
      * Get the message envelope.
@@ -45,10 +49,7 @@ class EventMail extends Mailable
     {
          return new Content(
             view: 'email.event ',
-            with: [
-                'message' => $this->data,
-               
-            ],
+      
         );
     }
 

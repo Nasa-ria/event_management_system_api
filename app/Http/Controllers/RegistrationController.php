@@ -61,8 +61,8 @@ class RegistrationController extends Controller
 
     public function eventRegistration(Request $request )
     {
-        $user= $request->user()->id;
-        // dd($request->all());
+        $user= $request->user();
+        $id = $user->id;
 
         $validated = $request->validate([
             'event' => 'required|string',
@@ -76,7 +76,7 @@ class RegistrationController extends Controller
 
 
         $event = Event::create([
-            'user_id' => $user, // Corrected the assignment of user_id
+            'user_id' => $id, // Corrected the assignment of user_id
             'event' => $validated['event'],
             'email' => $validated['email'],
             'attendees' => $validated['attendees'],
@@ -85,8 +85,9 @@ class RegistrationController extends Controller
             'location' => $validated['location']
 
         ]);
-        $email = $validated['email'];
-        Mail::to($email)->send(new EventMail());
+        // dd($event);
+        $email = $event->email;
+        Mail::to($email)->send(new EventMail( $event,$user));
         return response()->json([
             "event" => $event,
         ]);

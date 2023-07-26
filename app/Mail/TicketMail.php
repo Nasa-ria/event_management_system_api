@@ -49,7 +49,7 @@ class TicketMail extends Mailable
         return new Content(
             view: 'Email.ticket',
             with: [
-                'uuid' => $this->ticket->uniqueCode,
+                'message' => $this->ticket,
                
             ],
         );
