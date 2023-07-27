@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Google_Client;
+use Google\Service;
 use App\Models\Event;
 use App\Mail\EventMail;
-use App\Models\Eventpromotion;
+// use Google_Service_Calendar;
+use Google\Service\Calendar;
 use Illuminate\Http\Request;
+use App\Models\Eventpromotion;
 use Illuminate\Support\Facades\Mail;
-use Google_Client;
-use Google_Service_Calendar;
 
 
 class EventController extends Controller
@@ -71,12 +73,13 @@ class EventController extends Controller
     }
     
 
-    odelo
+
     private function updateCalendarEvent(Event $event)
     {
+        // require_once require_once './vendor/autoload.php';
         // Initialize Google API client with your credentials
         $client = new Google_Client();
-        $client->setAuthConfig('path_to_your_credentials_file.json');
+        $client->setAuthConfig('C:\Users\WALULEL\Downloads\event-management-system-api-34a0fb4aff73.json');
         $client->addScope(Google_Service_Calendar::CALENDAR_EVENTS);
 
         // Create a service to interact with the Google Calendar API
@@ -94,5 +97,6 @@ class EventController extends Controller
 
         // Save the event ID from Google Calendar to your database for future updates
         $event->update(['google_calendar_event_id' => $createdEvent->id]);
+        return response()->json(['message' => 'Event added to calender successfully']);
     }
 }

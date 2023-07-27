@@ -54,11 +54,8 @@
     "extra": {
         "laravel": {
             "dont-discover": []
-        },
-        "google/apiclient-services": [
-            "Google_Service_Calendar"
-           
-        ]
+        }
+      
     },
     "config": {
         "optimize-autoloader": true,
