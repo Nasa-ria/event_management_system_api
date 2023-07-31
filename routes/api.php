@@ -33,7 +33,19 @@ Route::middleware(['auth:api'])->group(function () {
 Route::post('registration', [UserController::class,'registration'])->name('registration');
 Route::post('signin', [UserController::class,'signIn'])->name('signin');
 Route::get('index', [UserController::class,'users'])->name('index');
+Route::get('calender', [EventController::class,'calender'])->name('calender');
+Route::get('event/{id}', [EventController::class, 'events'])->name('events');
+Route::post('event/{id}/feedback', [EventController::class, 'submitFeedback'])->name('submitFeedback');
+
+
+Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
+
 // ticket
 
 
+// For barcode scanning
+Route::get('/scan-ticket/{ticketCode}', [TicketController::class,'scanTicket'])->name('scanTicket');
+
 // Route::get('/generate-barcode', [ProductController::class, 'index'])->name('generate.barcode');
+#replace awesomepaymentgateway with actual payment package
+// composer require awesomepaymentgateway/awesome-sdk
