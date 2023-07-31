@@ -12,6 +12,11 @@
             <h1>Event Ticket</h1>
             <p>Hello,</p>
             <p>Thank you for purchasing a ticket to our event! Below is your ticket information:</p>
+            <div>{!! $barcodeImage !!}</div>
+
+                <!-- Display other ticket information -->
+                <h2>Ticket Code: {{ $ticket->ticket_code }}</h2>
+                <h3>Ticket Type: {{ $ticket->ticket_type }}</h3>
             <ul>
                 <li><strong>Event Name:</strong> {{ $event->event }}</li>
                 <li><strong>Date:</strong> {{ $event->date }}</li>
