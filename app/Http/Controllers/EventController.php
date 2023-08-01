@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Google_Client;
 use Google\Service;
 use App\Models\Event;
+use App\Models\Ticket;
 use App\Mail\EventMail;
 use App\Models\Feedback;
 use Google\Service\Calendar;
@@ -45,7 +46,7 @@ class EventController extends Controller
         ]);
         // dd($event);
           // Synchronize the event date with Google Calendar
-          $this->updateCalendarEvent($event);
+        //   $this->updateCalendarEvent($event);
 
         $email = $event->email;
         Mail::to($email)->send(new EventMail( $event,$user));
@@ -119,31 +120,31 @@ class EventController extends Controller
     public function calender(Google_Service_Calendar $client){
         $calendarList = $client->calendarList->listCalendarList();
         
-}
-public function submitFeedback(Request $request, $id)
-{
-    $event_id = Event::findOrFail($id);
+       }
+    public function submitfeedback(Request $request)
+    {
+        $event_id = 1;
 
-    $validatedData = $request->validate([
-        'feedback' => 'required|string|max:255',
-        'event_id'  =>'required'
-    ]);
+            $request->validate([
+            'feedback' => 'required|string|max:255',
+           ]);
 
-    // You can store the feedback in the database or perform any other actions here.
-    $feedback = Feedback ::create([
-        'feedback' => $request->feedback,
-        'event_id'=>$event_id
-    ]);
-    return $feedback;
-}
+        // You can store the feedback in the database or perform any other actions here.
+        $feedback =Feedback::create([
+            'feedback' => $request->feedback,
+            'event_id'=>$event_id
+        ]);
+        return $feedback;
+    }
 
-public function events(){
-    $events=  Event::all();
-     return response()->json([
-      
-        "events"=>$events,
-     ]);
-}
+public function geteventwithticket( Request $request,$id){
+    // Get a ticket and retrieve its associated event
+   $ticket = Ticket::find($id);
+   $event = $ticket->event; // This will return the event to which the ticket belongs
+   return $event;
+  }
+
+
 
 
 public function event(Request $request, Event $event){
@@ -157,4 +158,5 @@ public function event(Request $request, Event $event){
     }
    
 }
+ 
 }
