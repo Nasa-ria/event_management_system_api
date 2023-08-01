@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('ticket_type')->nullable();
             $table->date('date')->nullable();
             $table->timestamps();
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
         });
     }
 
