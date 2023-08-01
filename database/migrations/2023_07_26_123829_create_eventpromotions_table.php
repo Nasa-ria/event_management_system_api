@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('event_name');
             $table->string('promotion_type');
-            $table->integer('discount');
+            $table->integer('discount')->nullable();
             $table->timestamps();
          
         });
