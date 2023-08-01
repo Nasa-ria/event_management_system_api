@@ -24,18 +24,24 @@ use App\Http\Controllers\RegistrationController;
 
 Route::middleware(['auth:api'])->group(function () {
     Route::post('eventRegistration', [EventController::class,'eventRegistration'])->name('eventRegistration');
-    Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
-    Route::get('events', [TicketController::class,'events'])->name('events');
+    Route::get('getRegistration', [EventController::class,'getRegistration'])->name('getRegistration');
+    
+    Route::post('eventpromotion', [EventController::class,'createEventPromotion'])->name('eventpromotion');
+    Route::get('getpromotion{id}', [EventController::class,'getPromotion'])->name('getpromotion');#make controller function
+  
 });
     
-
-
+  
+Route::get('events', [TicketController::class,'events'])->name('events');
+Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
+Route::get('getTicket/{id}', [TicketController::class,'getTicket'])->name('getTicket'); #make controller function
 Route::post('registration', [UserController::class,'registration'])->name('registration');
 Route::post('signin', [UserController::class,'signIn'])->name('signin');
 Route::get('index', [UserController::class,'users'])->name('index');
 Route::get('calender', [EventController::class,'calender'])->name('calender');
 Route::get('event/{id}', [EventController::class, 'events'])->name('events');
-Route::post('event/{id}/feedback', [EventController::class, 'submitFeedback'])->name('submitFeedback');
+Route::post('getfeedback/{id}', [EventController::class, 'getfeedback'])->name('getfeedback');#make controller function
+Route::post('feedback', [EventController::class, 'submitfeedback'])->name('submitfeedback');
 
 
 Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
