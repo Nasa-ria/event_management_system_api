@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Feedback extends Model
 {
@@ -12,4 +13,9 @@ class Feedback extends Model
         'event_id',
         'feedback',
     ];
+    public function event()
+    {
+        return $this->belongsTo(Event::class, 'id', 'event_id');
+    }
+
 }
