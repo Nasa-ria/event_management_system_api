@@ -6,6 +6,8 @@ use App\Models\Event;
 use App\Models\User; 
 use App\Models\Ticket;
 use App\Mail\TicketMail;
+use App\Models\Attendees;
+use Google\Service\Dfareporting\Resource\EventTags;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -14,40 +16,37 @@ use Picqer\Barcode\BarcodeGeneratorHTML;
 class TicketController extends Controller
 { 
 
-    private function createTicket(Request $request){
-        $user= $request->user()->id;
+    private function createTicket(Request $request,$id){
+        // $event_id = Event::find($id);
+        $event_id = Event::find($id);
+        //   $tickets = $event->tickets;
         $request->validate([
             'event_name' => 'required',
+            
         ]);
-    
-        // Fetch the event based on the event name
-        $event = Event::where('event', '=', $request->event_name)->first();
-    
-        if (!$event) {
-            // Handle the case where the event is not found
-            return response()->json(['message' => 'Event not found'], 404);
-        }
-    
         $ticket = Ticket::create([
             'event_name' => $request->event_name,
-            'event_id' => $event->id
+            'event_id' => $event_id
         ]);
-    
+   
         return $ticket;
 
     }
 
     public function purchaseTicket(Request $request)
 {
+
+    $id= 1;
     $request->validate([
         'quantity' => 'required',
         'email' => 'required',
+        'name'=>"required",
         'ticket_type' => 'required' // Corrected the field name 'ticket type' to 'ticket_type'
     ]);
 
     // Create a new ticket and assign the attributes based on the request data
-    $ticket = $this->createTicket($request);
-    $ticket->purchase = $ticket->status; // Set the status attribute (assuming status exists as an attribute in the Ticket model)
+    $ticket = $this->createTicket($request,$id);
+   $ticket->status =  "purchase" ; // Set the status attribute (assuming status exists as an attribute in the Ticket model)
     // If you want to set the status based on some specific condition, update this line accordingly.
     $ticket->email = $request->email; // Set the email attribute
     $ticket->ticket_code = json_encode($this->generateBarcode($request->quantity)); // Set the ticket_code attribute using the generated barcode
@@ -55,6 +54,11 @@ class TicketController extends Controller
 
     // Save the changes to the ticket
     $ticket->save();
+
+     $attendees = Attendees::create([
+      'name'=>$request->name,
+      'email'=>$request->email,
+     ]);
 
     // Update the attendees count for the event
     $event = Event::where('event', '=', request()->event_name)->first();
@@ -66,7 +70,7 @@ class TicketController extends Controller
     // Send the ticket information to the user via email
     Mail::to($request->email)->send(new TicketMail($ticket, $event));
 
-    return $ticket;
+    return response()->json(['data'=>$ticket,$attendees]);
 }
     private function generateBarcode($quantity)
     {
@@ -126,5 +130,16 @@ class TicketController extends Controller
             return back()->with('error', 'Payment failed. Please try again.');
         }
     }
-   
+
+     
+     public function getticketwithevent(Request $request,$id){
+        // Get an event and retrieve its tickets
+    $event = Event::find($id);
+    $tickets = $event->tickets; // This will return a collection of tickets related to the event
+
+ return response()->json([
+  
+    "events"=>$tickets,
+ ]);
+}
 }
