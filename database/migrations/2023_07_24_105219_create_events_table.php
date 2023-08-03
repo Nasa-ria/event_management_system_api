@@ -17,11 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('event');
             $table->string('email');
-            $table->Integer('attendees');
+            $table->Integer('capacity');
             $table->string('contact');
+            $table->string('price_range')->nullable();
             $table->date('date');
-            $table->string('location');
-            $table->unsignedBigInteger('user_id');
+            $table->string('venue');
             $table->rememberToken();
             $table->timestamps();
         });
