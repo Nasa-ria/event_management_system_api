@@ -23,12 +23,10 @@ use App\Http\Controllers\RegistrationController;
 // });
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::post('eventRegistration', [EventController::class,'eventRegistration'])->name('eventRegistration');
+    Route::post('eventRegistration', [EventController::class,'store'])->name('eventRegistration');
     Route::get('getRegistration', [EventController::class,'getRegistration'])->name('getRegistration');
-    
     Route::post('eventpromotion', [EventController::class,'createEventPromotion'])->name('eventpromotion');
     Route::get('getpromotion{id}', [EventController::class,'getPromotion'])->name('getpromotion');#make controller function
-  
 });
     
   
