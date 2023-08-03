@@ -8,23 +8,7 @@ use Illuminate\Http\Request;
 class AttendeesController extends Controller
 
 {
-    public function addAttendee(Request $request, $eventId)
-    {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:attendees,email',
-        ]);
 
-        $event = Event::findOrFail($eventId);
-
-        $attendee = $event->attendees()->create([
-            'name' => $request->name,
-            'email' => $request->email,
-            // Add other fields specific to attendees if needed
-        ]);
-
-        return response()->json(['message' => 'Attendee added successfully', 'data' => $attendee]);
-    }
 
     public function updateAttendee(Request $request, $eventId, $attendeeId)
     {
