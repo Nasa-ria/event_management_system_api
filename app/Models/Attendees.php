@@ -11,5 +11,11 @@ class Attendees extends Model
     protected $fillable = [
         'name',
         'email',
+        'event_id'
     ];
+
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'id', 'event_id');
+    }
 }

@@ -17,13 +17,13 @@ class Event extends Model
         'event',
         'email',
         'contact',
-        'attendees',
+        'capacity',
         "user_id",
-        "location",
+        "venue",
         "date"
     ];
 
- /**
+    /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
@@ -35,19 +35,21 @@ class Event extends Model
 
     public function User()
     {
-        return $this->belongsTo(User::class,'id','user_id');
+        return $this->belongsTo(User::class, 'id', 'user_id');
     }
-  
-    
-        public function tickets()
-        {
-            return $this->hasMany(Ticket::class, 'id', 'event_id');
-        }
 
-        public function feedback()
-        {
-            return $this->hasMany(Feedback::class, 'id', 'event_id');
-        }
-    
-    
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'event_id', 'id');
+    }
+
+    public function feedback()
+    {
+        return $this->hasMany(Feedback::class, 'event_id', 'id');
+    }
+
+    public function attendeess()
+    {
+        return $this->belongsTo(Attendees::class, 'event_id', 'id');
+    }
 }
