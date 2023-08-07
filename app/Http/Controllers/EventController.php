@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Ticket;
 use App\Mail\EventMail;
 use App\Models\Feedback;
+use App\Models\TicketPrice;
 use Google\Service\Calendar;
 use Google_Service_Calendar;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $user = $request->user();
-        $id = $user->id;
+        // $id = $user->id;
 
         $validated = $request->validate([
             'event' => 'required',
@@ -51,22 +52,34 @@ class EventController extends Controller
             'capacity' => 'required',
             'contact' => 'required',
             'date' => 'required',
-            'venue' => 'required'
+            'venue' => 'required',
+            'ticketTypesAndPrices'=>'required'
 
         ]);
+        // $ticketTypesAndPrices = [
+        //     'General Admission' => 50.00,
+        //     'VIP' => 100.00,
+        //     'Student' => 25.00,
+        // ];
+        
         $event = Event::create([
-            'user_id' => $id, // Corrected the assignment of user_id
             'event' => $validated['event'],
             'email' => $validated['email'],
             'capacity' => $validated['capacity'],
             'contact' => $validated['contact'],
             'date' => $validated['date'],
             'venue' => $validated['venue']
-        ]);
+        ]);  
+
+        $ticketPrice = new TicketPrice();
+        $ticketPrice->event_id = $event->id;
+        $ticketPrice->ticket_types_and_prices =  $validated['ticketTypesAndPrices'];
+        $ticketPrice->save();
         // $email = $event->email;
         // Mail::to($email)->send(new EventMail( $event,$user));
         return response()->json([
             "event" => $event,
+            "ticket_price"=>$ticketPrice
         ]);
     }
 
@@ -95,31 +108,8 @@ class EventController extends Controller
         return response()->json(['message' => 'event updated successfully', 'data' => $event]);
     }
 
-    public function getfeedback(Request $request, $id)
-    {
-        $event = Event::findorfail($id); #pass id to view
-        return "hello word";
-    }
-    public function submitfeedback(Request $request)
-    {
-
-        $request->validate([
-            'feedback' => 'required|string|max:255',
-        ]);
-
-        // You can store the feedback in the database or perform any other actions here.
-        $feedback = Feedback::create([
-            'feedback' => $request->feedback,
-            'event_id' => $event_id
-        ]);
-        return $feedback;
-    }
-
-    public function geteventwithticket(Request $request, $id)
-    {
-        // Get a ticket and retrieve its associated event
-        $ticket = Ticket::find($id);
-        $event = $ticket->event; // This will return the event to which the ticket belongs
-        return $event;
-    }
+  public function destroy(Request $request,Event $event){
+        $event -> delete();
+        return "deleted";
+  }
 }

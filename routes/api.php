@@ -35,11 +35,10 @@ Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name(
 Route::get('getTicket/{id}', [TicketController::class,'getTicket'])->name('getTicket'); #make controller function
 Route::post('registration', [UserController::class,'registration'])->name('registration');
 Route::post('signin', [UserController::class,'signIn'])->name('signin');
-Route::get('index', [UserController::class,'users'])->name('index');
+Route::post('signin', [UserController::class,'signIn'])->name('signin');
+Route::get('logout', [UserController::class,'logout'])->name('logout');
 Route::get('calender', [EventController::class,'calender'])->name('calender');
 Route::get('event/{id}', [EventController::class, 'events'])->name('events');
-Route::post('getfeedback/{id}', [EventController::class, 'getfeedback'])->name('getfeedback');#make controller function
-Route::post('feedback', [EventController::class, 'submitfeedback'])->name('submitfeedback');
 
 
 Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');

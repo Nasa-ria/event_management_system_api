@@ -108,4 +108,26 @@ class Controller extends BaseController
     //         return back()->with('error', 'Payment failed. Please try again.');
     //     }
     // }
+
+
+
+    // public function getfeedback(Request $request, $id)
+    // {
+    //     $event = Event::findorfail($id); #pass id to view
+    //     return "hello word";
+    // }
+    // public function submitfeedback(Request $request)
+    // {
+
+    //     $request->validate([
+    //         'feedback' => 'required|string|max:255',
+    //     ]);
+
+    //     // You can store the feedback in the database or perform any other actions here.
+    //     $feedback = Feedback::create([
+    //         'feedback' => $request->feedback,
+    //         'event_id' => $event_id
+    //     ]);
+    //     return $feedback;
+    // }
 }

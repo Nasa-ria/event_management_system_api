@@ -18,7 +18,6 @@ class Event extends Model
         'email',
         'contact',
         'capacity',
-        "user_id",
         "venue",
         "date"
     ];

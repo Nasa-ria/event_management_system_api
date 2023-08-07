@@ -31,31 +31,41 @@ class TicketController extends Controller
 
     public function purchaseTicket(Request $request)
     {
-
-        // $id = Event::find(2);
         $request->validate([
             'quantity' => 'required',
             'email' => 'required',
-            'name' => "required",
+            'contact' => 'required',
+            'name' => 'required',
             'price' => 'required',
-            'ticket_type' => 'required|in:reguler,discount,double'
+            'ticket_type' => 'required|in:reguler,fixed,double'
         ]);
+        // dd($request->all());
 
         // Create a new ticket and assign the attributes based on the request data
         $ticket = $this->createTicket($request);
-        $ticket->status =  "purchase";
+        dd($ticket);
+        $ticket->status = "purchase";
+        $ticket->quantity = $request->quantity;
         $ticket->ticket_code = json_encode($this->generateBarcode($request->quantity)); // Set the ticket_code attribute using the generated barcode
         $ticket->ticket_type = $request->input('ticket_type');
         $ticket->save();
-
-        $attendees = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'event_id' => $request->event_id
+        
+        //  if('user exist'){
+        //     return "pass user info ";
+        //  }else{
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'contact' => $request->contact
+            ]);
+        //  }
+        $attendees = Attendees::create([
+            'user_id' =>$user->id,
+            'event_id'=>$request->event_id
         ]);
 
         // Update the attendees count for the event
-        $event = Event::where('id', '=', request()->event_id)->first();
+        $event = Event::where('id', '=', $attendees->event_id)->first();
         $event->decrement('capacity');
         if ($event->capacity == 0) {
             return "sold out";
@@ -64,7 +74,7 @@ class TicketController extends Controller
         // Send the ticket information to the user via email
         // Mail::to($request->email)->send(new TicketMail($ticket, $event));
 
-        return response()->json(['ticket' => $ticket,'attendees'=> $attendees]);
+        return response()->json(['ticket' => $ticket,'attendees'=> $attendees,'user'=>$user]);
     }
     private function generateBarcode($quantity)
     {

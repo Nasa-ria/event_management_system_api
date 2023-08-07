@@ -15,7 +15,8 @@ class Ticket extends Model
         'price',
         'date',
         'status',
-        'event_id'
+        'event_id',
+        'quantity'
     ];
 
     
