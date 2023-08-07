@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('email');
             $table->Integer('capacity');
             $table->string('contact');
-            $table->string('price_range')->nullable();
             $table->date('date');
             $table->string('venue');
             $table->rememberToken();

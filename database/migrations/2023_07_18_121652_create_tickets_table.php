@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('status')->default('unpurchase');
             $table->unsignedBigInteger('event_id');
+            $table->integer('quantity');
             $table->json('ticket_code')->nullable();
             $table->string('ticket_type')->nullable();
             $table->integer('price ')->nullable();
