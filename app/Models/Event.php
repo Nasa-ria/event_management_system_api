@@ -15,11 +15,14 @@ class Event extends Model
 
     protected $fillable = [
         'event',
-        'email',
-        'contact',
+        'date',
+        'time',
+        'details',
+          'status',
         'capacity',
-        "venue",
-        "date"
+        'venue',
+        'date',
+        
     ];
 
     /**
@@ -29,22 +32,18 @@ class Event extends Model
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'ticket_types_and_prices'
     ];
 
-
+ 
     public function User()
     {
-        return $this->belongsTo(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     public function tickets()
     {
         return $this->hasMany(Ticket::class, 'event_id', 'id');
-    }
-
-    public function feedback()
-    {
-        return $this->hasMany(Feedback::class, 'event_id', 'id');
     }
 
     public function attendeess()

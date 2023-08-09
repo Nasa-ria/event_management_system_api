@@ -17,11 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('status')->default('unpurchase');
             $table->unsignedBigInteger('event_id');
-            $table->integer('quantity');
-            $table->json('ticket_code')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->json('ticket_code')->nullable();  
             $table->string('ticket_type')->nullable();
-            $table->integer('price ')->nullable();
-            $table->date('date')->nullable();
+            $table->integer('total_payment')->nullable();
             $table->timestamps();
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
         });

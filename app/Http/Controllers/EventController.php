@@ -33,17 +33,17 @@ class EventController extends Controller
 
     public function singleEvent(Request $request, Event $event)
     {
-        $feedbacks = Feedback::where('event_id', '=', $event->id)->get();
-        if ($feedbacks) {
+        $event = Event::where('id', '=', $event->id)->get();
+       
             return response()->json([
-                "feedbacks" => $feedbacks,
+                "event" => $event,
             ]);
         }
-    }
+    
 
     public function store(Request $request)
     {
-        $user = $request->user();
+        // $user = $request->user();
         // $id = $user->id;
 
         $validated = $request->validate([
@@ -61,25 +61,21 @@ class EventController extends Controller
         //     'VIP' => 100.00,
         //     'Student' => 25.00,
         // ];
-        
+        $email = $request->email;
+        // if($email){
+        //     Mail::to($email)->send(new EventMail(  ));
+        // } 
         $event = Event::create([
             'event' => $validated['event'],
-            'email' => $validated['email'],
+            'details' => $validated['details'],
             'capacity' => $validated['capacity'],
             'contact' => $validated['contact'],
             'date' => $validated['date'],
-            'venue' => $validated['venue']
+            'time' => $validated['time'],
+           'ticketTypesAndPrices' =>$validated[json_encode('ticketTypesAndPrices')]
         ]);  
-
-        $ticketPrice = new TicketPrice();
-        $ticketPrice->event_id = $event->id;
-        $ticketPrice->ticket_types_and_prices =  $validated['ticketTypesAndPrices'];
-        $ticketPrice->save();
-        // $email = $event->email;
-        // Mail::to($email)->send(new EventMail( $event,$user));
         return response()->json([
-            "event" => $event,
-            "ticket_price"=>$ticketPrice
+            "event" => $event
         ]);
     }
 

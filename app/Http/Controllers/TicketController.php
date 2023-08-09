@@ -35,21 +35,21 @@ class TicketController extends Controller
             'quantity' => 'required',
             'email' => 'required',
             'contact' => 'required',
-            'name' => 'required',
-            'price' => 'required',
+            'name' => 'required', 
             'ticket_type' => 'required|in:reguler,fixed,double'
         ]);
         // dd($request->all());
 
         // Create a new ticket and assign the attributes based on the request data
         $ticket = $this->createTicket($request);
-        dd($ticket);
-        $ticket->status = "purchase";
-        $ticket->quantity = $request->quantity;
-        $ticket->ticket_code = json_encode($this->generateBarcode($request->quantity)); // Set the ticket_code attribute using the generated barcode
-        $ticket->ticket_type = $request->input('ticket_type');
-        $ticket->save();
-        
+          $price= $request->input('price') * $request->input('quantity');
+        $ticket->update([
+        'status' => "purchase",
+        'quantity' => $request->input('quantity'),
+        'total_price' => $price,
+        'ticket_code'=>json_encode($this->generateBarcode($request->quantity)),// Set the ticket_code attribute using the generated barcode
+        'ticket_type' => $request->input('ticket_type'),
+        ]);
         //  if('user exist'){
         //     return "pass user info ";
         //  }else{

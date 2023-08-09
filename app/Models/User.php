@@ -21,7 +21,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'contact'
+        'contact',
+        'image',
+        'likes',
+        'followers',
+        'about',
+        'subscription_plan'
     ];
 
     /**
@@ -46,7 +51,7 @@ class User extends Authenticatable
    
     public function Event()
     {
-        $event= $this->hasMany(Event::class,'user_id','id');
+        $event= $this->hasMany(Event::class);
 
         return $event;
     }

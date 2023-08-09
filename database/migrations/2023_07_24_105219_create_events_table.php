@@ -16,11 +16,12 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('event');
-            $table->string('email');
-            $table->Integer('capacity');
-            $table->string('contact');
-            $table->date('date');
-            $table->string('venue');
+            $table->integer('capacity');
+            $table->string('details');
+            $table->date('date');  
+            $table->time('time');  
+            $table->string('status')->default('draft');
+            $table->json('ticket_types_and_prices')->nullable(); 
             $table->rememberToken();
             $table->timestamps();
         });

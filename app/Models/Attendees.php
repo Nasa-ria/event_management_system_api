@@ -9,8 +9,7 @@ class Attendees extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
-        'email',
+        'user_id',
         'event_id'
     ];
 

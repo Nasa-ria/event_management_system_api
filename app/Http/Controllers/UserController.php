@@ -46,8 +46,8 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string',
             'email' => 'required',
-            'password' => 'required|min:8|confirmed',
             'contact'=>'required'
+
 
         ]);
 
@@ -55,7 +55,6 @@ class UserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'contact' => $validated['contact'],
-            'password' => Hash::make($request->password)
         ]);
         $token = $user->createToken("User");
         $accessToken = $token->accessToken;
@@ -68,20 +67,24 @@ class UserController extends Controller
 
     public function update(Request $request,User $user){
         {
+            $user = User::findOrFail($user);
             $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email',
                 'contact' => 'required',
-            
+                'about' => 'required',
+                'subscription_plan'=>'required'
+
             ]);
-    
-            $user = User::findOrFail($user);
-    
+            $image = $request->file('profile')->getClientOriginalName();
+            $image = $request->file('image')->storeAs('public/image/profile', $image);
             $user->update([
                 'event' => $request->name,
-                'email' => $request->email,
+                'email' => $request->email, 
+                'about' => $request->about,
+                'subscription_plan'=>$request->subscription_plan,
                 'contact' => $request->contact,
-
+                'image' => $image,
             ]);
     
             return response()->json(['message' => 'user updated successfully', 'data' => $user]);
