@@ -48,12 +48,11 @@ class EventController extends Controller
 
         $validated = $request->validate([
             'event' => 'required',
-            'email' => 'required',
+            'details' => 'required',
             'capacity' => 'required',
-            'contact' => 'required',
             'date' => 'required',
-            'venue' => 'required',
-            'ticketTypesAndPrices'=>'required'
+            'time'=>'required',
+            'ticketTypesAndPrices'=>'required|array'
 
         ]);
         // $ticketTypesAndPrices = [
@@ -61,19 +60,19 @@ class EventController extends Controller
         //     'VIP' => 100.00,
         //     'Student' => 25.00,
         // ];
-        $email = $request->email;
-        // if($email){
-        //     Mail::to($email)->send(new EventMail(  ));
-        // } 
+        
         $event = Event::create([
             'event' => $validated['event'],
             'details' => $validated['details'],
             'capacity' => $validated['capacity'],
-            'contact' => $validated['contact'],
             'date' => $validated['date'],
             'time' => $validated['time'],
-           'ticketTypesAndPrices' =>$validated[json_encode('ticketTypesAndPrices')]
+           'ticketTypesAndPrices' =>json_encode($validated['ticketTypesAndPrices'])
         ]);  
+        // $table->date('date');  
+        // 'calendar_id' => $calendarId,
+        // 'provider_id' => $eventId,
+        // 'provider_type' => $this->provider->getProviderName()
         return response()->json([
             "event" => $event
         ]);
@@ -82,23 +81,23 @@ class EventController extends Controller
     public function update(Request $request, $event)
     {
         $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email',
+            'event' => 'required|string',
+            'details' => 'required|email',
             'capacity' => 'required',
-            'contact' => 'required',
+            'time' => 'required',
             'date' => 'required',
-            'venue' => 'required',
+            'ticketTypesAndPrices' => 'required',
         ]);
 
         $event = Event::findOrFail($event);
 
         $event->update([
-            'event' => $request->name,
-            'email' => $request->email,
+            'event' => $request->event,
+            'details' => $request->details,
             'capacity' => $request->capacity,
-            'contact' => $request->contact,
+            'time' => $request->time,
             'date' => $request->date,
-            'venue' => $request->venue
+            'ticketTypesAndPrices' => $request->ticketTypesAndPrices
         ]);
 
         return response()->json(['message' => 'event updated successfully', 'data' => $event]);
@@ -108,4 +107,15 @@ class EventController extends Controller
         $event -> delete();
         return "deleted";
   }
+
+  public function calander()
+
+{
+        $client = GoogleCalendar::getClient();
+
+        $authUrl = $client->createAuthUrl();
+
+        return redirect($authUrl);
+
+ }
 }

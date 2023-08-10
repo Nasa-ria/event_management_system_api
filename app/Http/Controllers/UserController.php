@@ -46,6 +46,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string',
             'email' => 'required',
+            'password'=>'required',
             'contact'=>'required'
 
 
@@ -55,6 +56,7 @@ class UserController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'contact' => $validated['contact'],
+            'password' =>Hash::make($validated['password'])
         ]);
         $token = $user->createToken("User");
         $accessToken = $token->accessToken;

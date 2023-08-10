@@ -42,14 +42,14 @@ class TicketController extends Controller
 
         // Create a new ticket and assign the attributes based on the request data
         $ticket = $this->createTicket($request);
-          $price= $request->input('price') * $request->input('quantity');
+          $payment= $request->input('price') * $request->input('quantity');
         $ticket->update([
         'status' => "purchase",
         'quantity' => $request->input('quantity'),
-        'total_price' => $price,
+        'total_payment' => $payment,
         'ticket_code'=>json_encode($this->generateBarcode($request->quantity)),// Set the ticket_code attribute using the generated barcode
         'ticket_type' => $request->input('ticket_type'),
-        ]);
+        ]); 
         //  if('user exist'){
         //     return "pass user info ";
         //  }else{
