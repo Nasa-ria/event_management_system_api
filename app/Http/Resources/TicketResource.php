@@ -17,10 +17,12 @@ class TicketResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id'=>$this->id,
-            'email'=>$this->email,
-            'event-name'=>$this->event_id,
+            'event_id'=>$this->event_id,
+            'total_payment'=>$this->total_payment,
             'status'=>$this->status,
-            'uniquecode'=>$this->uniquecode
+            'ticket_code'=>$this->ticket_code,
+            'ticket_type'=>$this->ticket_type,
+            'quantity'=>$this->qua
         ];
     }
 }
