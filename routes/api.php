@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -52,3 +53,17 @@ Route::get('/scan-ticket/{ticketCode}', [TicketController::class,'scanTicket'])-
 // Route::get('/generate-barcode', [ProductController::class, 'index'])->name('generate.barcode');
 #replace awesomepaymentgateway with actual payment package
 // composer require awesomepaymentgateway/awesome-sdk
+
+Route::post('first-or-create', function(Request $request) {
+    $user = User::firstOrcreate(
+                [
+                    'email' => $request->email
+                ],
+                [
+                'name' => $request->name,
+                'contact' => $request->contact
+                ]
+            );
+
+            return $user;
+});
