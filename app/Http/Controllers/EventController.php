@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Google_Client;
 use Google\Service;
 use App\Models\Event;
@@ -69,10 +70,6 @@ class EventController extends Controller
             'time' => $validated['time'],
            'ticketTypesAndPrices' =>json_encode($validated['ticketTypesAndPrices'])
         ]);  
-        // $table->date('date');  
-        // 'calendar_id' => $calendarId,
-        // 'provider_id' => $eventId,
-        // 'provider_type' => $this->provider->getProviderName()
         return response()->json([
             "event" => $event
         ]);
@@ -108,14 +105,38 @@ class EventController extends Controller
         return "deleted";
   }
 
-  public function calander()
+  public function fetchEventsToday()
+  {
+      $today = Carbon::now()->format('Y-m-d');
+  
+      $eventsToday = Event::whereDate('date', $today)->get();
+  
+      return $eventsToday;
+  }
 
+  public function fetchEventsYesterday()
 {
-        $client = GoogleCalendar::getClient();
+    $yesterday = Carbon::yesterday();
+    $events = Event::whereDate('date', $yesterday)->get();
 
-        $authUrl = $client->createAuthUrl();
+    return $events;
+}
 
-        return redirect($authUrl);
 
- }
+public function fetchEventsTomorrow()
+{
+    $tomorrow = Carbon::tomorrow();
+    $events = Event::whereDate('date', $tomorrow)->get();
+
+    return $events;
+}
+
+public function fetchEventsDate(Request $request)
+{
+    $targetDate= $request->targetDate;
+    // dd($targetDate);
+    $events = Event::whereDate('date', $targetDate)->get();
+
+    return $events;
+}
 }
