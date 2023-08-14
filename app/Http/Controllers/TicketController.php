@@ -50,9 +50,7 @@ class TicketController extends Controller
         'ticket_code'=>json_encode($this->generateBarcode($request->quantity)),// Set the ticket_code attribute using the generated barcode
         'ticket_type' => $request->input('ticket_type'),
         ]); 
-        //  if('user exist'){
-        //     return "pass user info ";
-        //  }else{
+
             $user = User::firstOrcreate(
                 [
                     'email' => $request->email

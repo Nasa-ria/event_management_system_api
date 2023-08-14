@@ -27,9 +27,13 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('eventRegistration', [EventController::class,'store'])->name('eventRegistration');
     Route::get('getRegistration', [EventController::class,'getRegistration'])->name('getRegistration');
     Route::post('eventpromotion', [EventController::class,'createEventPromotion'])->name('eventpromotion');
+    // routes/api.php
+   
+
     Route::get('getpromotion{id}', [EventController::class,'getPromotion'])->name('getpromotion');#make controller function
 });
-    
+Route::get('login/google', [UserController::class,'loginWithGoogle'])->name('loginWithGoogle');
+Route::get('login/google/callback', [UserController::class,'loginWithGoogleCallback'])->name('loginWithGoogleCallback');  
   
 Route::get('events', [TicketController::class,'events'])->name('events');
 Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
