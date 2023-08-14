@@ -39,6 +39,10 @@ Route::post('signin', [UserController::class,'signIn'])->name('signin');
 Route::get('logout', [UserController::class,'logout'])->name('logout');
 Route::get('calender', [EventController::class,'calender'])->name('calender');
 Route::get('event/{id}', [EventController::class, 'events'])->name('events');
+Route::get('fetchEventsToday', [EventController::class, 'fetchEventsToday'])->name('fetchEventsToday');
+Route::get('fetchEventsYesterday', [EventController::class, 'fetchEventsYesterday'])->name('fetchEventsYesterday');
+Route::get('fetchEventsTomorrow', [EventController::class, 'fetchEventsTomorrow'])->name('fetchEventsTomorrow');
+Route::get('fetchEventsDate', [EventController::class, 'fetchEventsDate'])->name('fetchEventsDate');
 
 
 Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
