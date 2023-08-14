@@ -23,10 +23,8 @@ return new class extends Migration
             $table->boolean('is_all_day')->default(false);
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
-            $table->timestamps();
-        
             $table->foreign('calendar_id')->references('provider_id')->on('calendars')->onDelete('CASCADE');
-            $table->timestamps();
+         $table->timestamps();
         });
     }
 

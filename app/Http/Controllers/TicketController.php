@@ -53,11 +53,15 @@ class TicketController extends Controller
         //  if('user exist'){
         //     return "pass user info ";
         //  }else{
-            $user = User::create([
+            $user = User::firstOrcreate(
+                [
+                    'email' => $request->email
+                ],
+                [
                 'name' => $request->name,
-                'email' => $request->email,
                 'contact' => $request->contact
-            ]);
+                ]
+            );
         //  }
         $attendees = Attendees::create([
             'user_id' =>$user->id,
