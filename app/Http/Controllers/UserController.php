@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
+
+
 
 
 class UserController extends Controller
@@ -27,14 +30,33 @@ class UserController extends Controller
 
     public function loginWithGoogleCallback()
     {
-        // $user = Socialite::driver('google')->user();
-        // Check if the user exists in your system, create if not
-
-        // Auth::login($user);
-
-        // return response()->json(['message' => 'Logged in with Google', 'user' => $user]);
+        try {
+            $user = Socialite::driver('google')->user();
+            
+            if ($user) {
+                $googleUser = Socialite::driver('google')->user();
+ 
+                $user = User::updateOrCreate([
+                    'googl_id' => $googleUser->id,
+                ], [
+                    'name' => $googleUser->name,
+                    'email' => $googleUser->email,
+                    'google_token' => $googleUser->token,
+                    'google_refresh_token' => $googleUser->refreshToken,
+                ]);
+             
+                Auth::login($user);
+                // Auth::login($user);
+                return response()->json(['message' => 'Logged in with Google', 'user' => $user]);
+            } else {
+                return response()->json(['message' => 'Google authentication failed: No user data received']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Google authentication failed: ' . $e->getMessage()]);
+        }
     }
-
+    
+    
     public function signIn(Request $request)
     {
         
@@ -66,13 +88,8 @@ class UserController extends Controller
             'email' => 'required',
             'password' => 'required',
             'contact' => 'required'
-
-
         ]);
-        $user = Socialite::driver('google')->user();
-        // Check if the user exists in your system, create if not
-
-        Auth::login($user);
+       
 
         $user = User::create([
             'name' => $validated['name'],

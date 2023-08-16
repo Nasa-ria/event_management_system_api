@@ -66,8 +66,11 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true
-        }
+            
+        },
+        "process-timeout":0
     },
     "minimum-stability": "stable",
     "prefer-stable": true
+
 }
