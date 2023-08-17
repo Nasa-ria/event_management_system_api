@@ -25,37 +25,49 @@ class UserController extends Controller
 
     public function loginWithGoogle()
     {
-        // return Socialite::driver('google');
+        try{
+           $google= Socialite::driver('google')->stateless()->redirect();
+           return $google;
+
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Google authentication failed: ' . $e->getMessage()]);
+        }
+      
     }
 
     public function loginWithGoogleCallback()
     {
         try {
-            $user = Socialite::driver('google')->user();
-            
-            if ($user) {
-                $googleUser = Socialite::driver('google')->user();
- 
-                $user = User::updateOrCreate([
-                    'googl_id' => $googleUser->id,
-                ], [
-                    'name' => $googleUser->name,
-                    'email' => $googleUser->email,
-                    'google_token' => $googleUser->token,
-                    'google_refresh_token' => $googleUser->refreshToken,
-                ]);
-             
-                Auth::login($user);
-                // Auth::login($user);
-                return response()->json(['message' => 'Logged in with Google', 'user' => $user]);
+            $user = Socialite::driver('google')->stateless()->user();
+
+    
+            $googleUser = User::where('google_id', $user->id)->first();
+            if ($googleUser) {
+                Auth::login($googleUser, true);
             } else {
-                return response()->json(['message' => 'Google authentication failed: No user data received']);
+                $newUser = User::create([
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'google_id' => $user->id
+                ]);
+                Auth::login($newUser);
             }
+    
+            return response()->json(['message' => 'Logged in with Google', 'user' => Auth::user()]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Google authentication failed: ' . $e->getMessage()]);
         }
     }
     
+    
+       // $user = User::updateOrCreate([
+                //     'googl_id' => $googleUser->id,
+                // ], [
+                //     'name' => $googleUser->name,
+                //     'email' => $googleUser->email,
+                //     'google_token' => $googleUser->token,
+                //     'google_refresh_token' => $googleUser->refreshToken,
+                // ]);
     
     public function signIn(Request $request)
     {
