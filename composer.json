@@ -11,6 +11,7 @@
         "laravel/framework": "^9.19",
         "laravel/passport": "^11.8",
         "laravel/sanctum": "^3.0",
+        "laravel/socialite": "^5.8",
         "laravel/tinker": "^2.7",
         "milon/barcode": "^10.0",
         "picqer/php-barcode-generator": "^2.3"
@@ -29,6 +30,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
+          
         }
     },
     "autoload-dev": {
@@ -64,8 +66,11 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true
-        }
+            
+        },
+        "process-timeout":0
     },
     "minimum-stability": "stable",
     "prefer-stable": true
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Google_Client;
 use Google\Service;
 use App\Models\Event;
@@ -69,10 +70,6 @@ class EventController extends Controller
             'time' => $validated['time'],
            'ticketTypesAndPrices' =>json_encode($validated['ticketTypesAndPrices'])
         ]);  
-        // $table->date('date');  
-        // 'calendar_id' => $calendarId,
-        // 'provider_id' => $eventId,
-        // 'provider_type' => $this->provider->getProviderName()
         return response()->json([
             "event" => $event
         ]);
@@ -111,7 +108,11 @@ class EventController extends Controller
   public function calander()
 
 {
-    // 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
-   
+        $client = GoogleCalendar::getClient();
+
+        $authUrl = $client->createAuthUrl();
+
+        return redirect($authUrl);
+
  }
 }

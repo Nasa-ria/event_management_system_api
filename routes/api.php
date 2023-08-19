@@ -27,9 +27,13 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('eventRegistration', [EventController::class,'store'])->name('eventRegistration');
     Route::get('getRegistration', [EventController::class,'getRegistration'])->name('getRegistration');
     Route::post('eventpromotion', [EventController::class,'createEventPromotion'])->name('eventpromotion');
+    // routes/api.php
+   
+
     Route::get('getpromotion{id}', [EventController::class,'getPromotion'])->name('getpromotion');#make controller function
 });
-    
+Route::get('login/google', [UserController::class,'loginWithGoogle'])->name('loginWithGoogle');
+Route::get('login/google/callback', [UserController::class,'loginWithGoogleCallback'])->name('loginWithGoogleCallback');  
   
 Route::get('events', [TicketController::class,'events'])->name('events');
 Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
@@ -40,6 +44,10 @@ Route::post('signin', [UserController::class,'signIn'])->name('signin');
 Route::get('logout', [UserController::class,'logout'])->name('logout');
 Route::get('calender', [EventController::class,'calender'])->name('calender');
 Route::get('event/{id}', [EventController::class, 'events'])->name('events');
+Route::get('fetchEventsToday', [EventController::class, 'fetchEventsToday'])->name('fetchEventsToday');
+Route::get('fetchEventsYesterday', [EventController::class, 'fetchEventsYesterday'])->name('fetchEventsYesterday');
+Route::get('fetchEventsTomorrow', [EventController::class, 'fetchEventsTomorrow'])->name('fetchEventsTomorrow');
+Route::get('fetchEventsDate', [EventController::class, 'fetchEventsDate'])->name('fetchEventsDate');
 
 
 Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
