@@ -32,8 +32,7 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::get('getpromotion{id}', [EventController::class,'getPromotion'])->name('getpromotion');#make controller function
 });
-Route::get('login/google', [UserController::class,'loginWithGoogle'])->name('loginWithGoogle');
-Route::get('login/google/callback', [UserController::class,'loginWithGoogleCallback'])->name('loginWithGoogleCallback');  
+
   
 Route::get('events', [TicketController::class,'events'])->name('events');
 Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
@@ -75,3 +74,9 @@ Route::post('first-or-create', function(Request $request) {
 
             return $user;
 });
+
+// Route::group(['middleware' => ['web','auth']], function (){
+    Route::get('login/google', [UserController::class,'loginWithGoogle'])->name('loginWithGoogle');
+    Route::get('login/google/callback', [UserController::class,'loginWithGoogleCallback'])->name('loginWithGoogleCallback');  
+//    }
+//   );
