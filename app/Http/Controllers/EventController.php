@@ -105,38 +105,14 @@ class EventController extends Controller
         return "deleted";
   }
 
-  public function fetchEventsToday()
-  {
-      $today = Carbon::now()->format('Y-m-d');
-  
-      $eventsToday = Event::whereDate('date', $today)->get();
-  
-      return $eventsToday;
-  }
+  public function calander()
 
-  public function fetchEventsYesterday()
 {
-    $yesterday = Carbon::yesterday();
-    $events = Event::whereDate('date', $yesterday)->get();
+        $client = GoogleCalendar::getClient();
 
-    return $events;
-}
+        $authUrl = $client->createAuthUrl();
 
+        return redirect($authUrl);
 
-public function fetchEventsTomorrow()
-{
-    $tomorrow = Carbon::tomorrow();
-    $events = Event::whereDate('date', $tomorrow)->get();
-
-    return $events;
-}
-
-public function fetchEventsDate(Request $request)
-{
-    $targetDate= $request->targetDate;
-    // dd($targetDate);
-    $events = Event::whereDate('date', $targetDate)->get();
-
-    return $events;
-}
+ }
 }
