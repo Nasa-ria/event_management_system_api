@@ -43,17 +43,19 @@ class UserController extends Controller
         try {
             $user = Socialite::driver('google')->stateless()->user();
 
-                     dd($user);
+                    //  dd($user);
             // $googleUser = User::where('google_id', $user->id)->first();
+    
             // if ($googleUser) {
             //     Auth::login($googleUser, true);
             // } else {
-            //     $newUser = User::create([
-            //         'name' => $user->name,
-            //         'email' => $user->email,
-            //         'google_id' => $user->id
-            //     ]);
-            //     Auth::login($newUser);
+                $newUser = User::create([
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'google_id' => $user->id
+                ]);
+                dd(Auth::login($newUser));
+                
             // }
     
             // return response()->json(['message' => 'Logged in with Google', 'user' => Auth::user()]);
