@@ -27,20 +27,8 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('eventRegistration', [EventController::class,'store'])->name('eventRegistration');
     Route::get('getRegistration', [EventController::class,'getRegistration'])->name('getRegistration');
     Route::post('eventpromotion', [EventController::class,'createEventPromotion'])->name('eventpromotion');
-    // routes/api.php
-   
-
-    Route::get('getpromotion{id}', [EventController::class,'getPromotion'])->name('getpromotion');#make controller function
 });
 
-  
-Route::get('events', [TicketController::class,'events'])->name('events');
-Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
-Route::get('getTicket/{id}', [TicketController::class,'getTicket'])->name('getTicket'); #make controller function
-Route::post('registration', [UserController::class,'registration'])->name('registration');
-Route::post('signin', [UserController::class,'signIn'])->name('signin');
-Route::post('signin', [UserController::class,'signIn'])->name('signin');
-Route::get('logout', [UserController::class,'logout'])->name('logout');
 Route::get('calender', [EventController::class,'calender'])->name('calender');
 Route::get('event/{id}', [EventController::class, 'events'])->name('events');
 Route::get('fetchEventsToday', [EventController::class, 'fetchEventsToday'])->name('fetchEventsToday');
@@ -48,8 +36,19 @@ Route::get('fetchEventsYesterday', [EventController::class, 'fetchEventsYesterda
 Route::get('fetchEventsTomorrow', [EventController::class, 'fetchEventsTomorrow'])->name('fetchEventsTomorrow');
 Route::get('fetchEventsDate', [EventController::class, 'fetchEventsDate'])->name('fetchEventsDate');
 
+Route::post('registration', [UserController::class,'registration'])->name('registration');
+Route::put('user/update/{user}', [UserController::class,'update'])->name('update');
+Route::post('signin', [UserController::class,'signIn'])->name('signin');
+Route::get('logout', [UserController::class,'logout'])->name('logout');
+Route::get('profile/{user}', [UserController::class,'profile'])->name('profile');
+  
+Route::get('events', [TicketController::class,'events'])->name('events');
+Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
+Route::get('getTicket/{id}', [TicketController::class,'getTicket'])->name('getTicket'); #make controller function
 
-Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
+
+
+// Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
 
 // ticket
 
@@ -61,19 +60,6 @@ Route::get('/scan-ticket/{ticketCode}', [TicketController::class,'scanTicket'])-
 #replace awesomepaymentgateway with actual payment package
 // composer require awesomepaymentgateway/awesome-sdk
 
-Route::post('first-or-create', function(Request $request) {
-    $user = User::firstOrcreate(
-                [
-                    'email' => $request->email
-                ],
-                [
-                'name' => $request->name,
-                'contact' => $request->contact
-                ]
-            );
-
-            return $user;
-});
 
 // Route::group(['middleware' => ['web','auth']], function (){
     Route::get('login/google', [UserController::class,'loginWithGoogle'])->name('loginWithGoogle');

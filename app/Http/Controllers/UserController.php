@@ -26,12 +26,7 @@ class UserController extends Controller
     public function loginWithGoogle()
     {
         try{
-            Socialite::driver('google')->stateless()
-        //    return Socialite::driver('google') stateless()->setScopes(['openid', 'email'])
-
-           ->redirect();
-        //    return $google;
-
+            Socialite::driver('google')->stateless()->redirect();
         } catch (\Exception $e) {
             return response()->json(['message' => 'Google authentication failed: ' . $e->getMessage()]);
         }
@@ -47,7 +42,7 @@ class UserController extends Controller
             // $googleUser = User::where('google_id', $user->id)->first();
     
             // if ($googleUser) {
-            //     Auth::login($googleUser, true);
+            //     Auth::login($googleUser, true); 
             // } else {
                 $newUser = User::create([
                     'name' => $user->name,
@@ -124,30 +119,30 @@ class UserController extends Controller
 
 
     public function update(Request $request, User $user)
-    { {
-            $user = User::findOrFail($user);
-            $request->validate([
-                'name' => 'required|string',
-                'email' => 'required|email',
-                'contact' => 'required',
-                'about' => 'required',
-                'subscription_plan' => 'required'
+    { 
+            $user = User::find($user);
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $image = $file->getClientOriginalName();
+                $path= $request->file('image')->storeAs('public/image/profile', $image);
+                // Process the file
+            } else {
+                $image = $user->image; 
+            }
 
-            ]);
-            $image = $request->file('profile')->getClientOriginalName();
-            $image = $request->file('image')->storeAs('public/image/profile', $image);
-            $user->update([
-                'event' => $request->name,
-                'email' => $request->email,
-                'about' => $request->about,
-                'subscription_plan' => $request->subscription_plan,
-                'contact' => $request->contact,
-                'image' => $image,
-            ]);
-
-            return response()->json(['message' => 'user updated successfully', 'data' => $user]);
+            if($user){
+                $user->$request->get('name');
+                $user ->$request->get('email');
+                $user->$request->get('about');
+                $user->$request->get('subscription_plan');
+                $user ->$request->get('contact');
+                $user->image = $image;
+                $user->save();
+                return response()->json(['message' => 'user updated successfully', 'data' => $user]);
+            }
+        
         }
-    }
+    
 
     public function profile(Request $request, User $user)
     {

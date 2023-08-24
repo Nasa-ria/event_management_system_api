@@ -52,7 +52,8 @@ class EventController extends Controller
             'details' => 'required',
             'capacity' => 'required',
             'date' => 'required',
-            'time'=>'required',
+            'start_time'=>'required',
+            'end_time'=>'required',
             'ticketTypesAndPrices'=>'required|array'
 
         ]);
@@ -67,7 +68,8 @@ class EventController extends Controller
             'details' => $validated['details'],
             'capacity' => $validated['capacity'],
             'date' => $validated['date'],
-            'time' => $validated['time'],
+            'start_time' => $validated['start_time'],
+            'end_time' => $validated['end_time'],
            'ticketTypesAndPrices' =>json_encode($validated['ticketTypesAndPrices'])
         ]);  
         return response()->json([
