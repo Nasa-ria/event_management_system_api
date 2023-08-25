@@ -20,6 +20,11 @@ class UserResource extends JsonResource
             'name' => $this->event,
             'email' => $this->email,      
             'password' => $this->password, 
+            'about'=>$this->about,
+            'subscription_plan'=>$this->subscription_plan,
+            'subscription_status'=>$this->subscription_status,
+            'image'=>$this->image,
+            'contact'=>$this->contact
         ];
     }
 }

@@ -52,7 +52,8 @@ class EventController extends Controller
             'details' => 'required',
             'capacity' => 'required',
             'date' => 'required',
-            'time'=>'required',
+            'start_time'=>'required',
+            'end_time'=>'required',
             'ticketTypesAndPrices'=>'required|array'
 
         ]);
@@ -67,7 +68,8 @@ class EventController extends Controller
             'details' => $validated['details'],
             'capacity' => $validated['capacity'],
             'date' => $validated['date'],
-            'time' => $validated['time'],
+            'start_time' => $validated['start_time'],
+            'end_time' => $validated['end_time'],
            'ticketTypesAndPrices' =>json_encode($validated['ticketTypesAndPrices'])
         ]);  
         return response()->json([
@@ -105,5 +107,43 @@ class EventController extends Controller
         return "deleted";
   }
 
+<<<<<<< HEAD
 
+=======
+  public function fetchEventsByDate(Request $request)
+  
+  {
+      $events = Event::whereDate('date', $targetDate)->get();
+  
+      return $events;
+  }
+
+  public function fetchEventsToday()
+{
+    $today= Carbon::now();
+
+    $eventsToday = Event::whereDate('date', $today)->get();
+
+    return $eventsToday;
+}
+
+
+public function fetchEventsTomorrow()
+{
+    $tomorrow = Carbon::tomorrow();
+
+    $eventstomorrow = Event::whereDate('date',  $tomorrow)->get();
+
+    return   $eventstomorrow ;
+}
+
+public function fetchEventsYesterday()
+{
+    $yesterday = Carbon::yesterday();
+
+    $eventsyesterday =  Event::whereDate('date', $yesterday)->get();
+
+    return  $eventsyesterday;
+}
+>>>>>>> fe20cf01f9a4cba10e4bbf2351489841ac4794f4
 }

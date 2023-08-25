@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('followers')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('contact');
+            $table->string('contact')->nullabe();
             $table->string('subscription_plan')->nullable();
             $table->string('subscription_status')->nullable();
             $table->string('password')->nullable();
