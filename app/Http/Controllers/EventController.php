@@ -105,14 +105,5 @@ class EventController extends Controller
         return "deleted";
   }
 
-  public function calander()
 
-{
-        $client = GoogleCalendar::getClient();
-
-        $authUrl = $client->createAuthUrl();
-
-        return redirect($authUrl);
-
- }
 }

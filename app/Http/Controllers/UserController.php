@@ -27,7 +27,7 @@ class UserController extends Controller
     {
         try{
            $google= Socialite::driver('google')->stateless()->redirect();
-           return $google;
+        //    return $google;
 
         } catch (\Exception $e) {
             return response()->json(['message' => 'Google authentication failed: ' . $e->getMessage()]);
@@ -40,20 +40,20 @@ class UserController extends Controller
         try {
             $user = Socialite::driver('google')->stateless()->user();
 
+    dd($user);
+        //     $googleUser = User::where('google_id', $user->id)->first();
+        //     if ($googleUser) {
+        //         Auth::login($googleUser, true);
+        //     } else {
+        //         $newUser = User::create([
+        //             'name' => $user->name,
+        //             'email' => $user->email,
+        //             'google_id' => $user->id
+        //         ]);
+        //         Auth::login($newUser);
+        //     }
     
-            $googleUser = User::where('google_id', $user->id)->first();
-            if ($googleUser) {
-                Auth::login($googleUser, true);
-            } else {
-                $newUser = User::create([
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'google_id' => $user->id
-                ]);
-                Auth::login($newUser);
-            }
-    
-            return response()->json(['message' => 'Logged in with Google', 'user' => Auth::user()]);
+        //     return response()->json(['message' => 'Logged in with Google', 'user' => Auth::user()]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Google authentication failed: ' . $e->getMessage()]);
         }
