@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('contact')->nullabe();
+            $table->sting('google_id')->nullable();        
             $table->string('subscription_plan')->nullable();
             $table->string('subscription_status')->nullable();
             $table->string('password')->nullable();

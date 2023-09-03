@@ -11,6 +11,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 
 
+
 class UserController extends Controller
 {
 
@@ -27,8 +28,7 @@ class UserController extends Controller
     {
         try{
            $google= Socialite::driver('google')->stateless()->redirect();
-           return $google;
-
+         
         } catch (\Exception $e) {
             return response()->json(['message' => 'Google authentication failed: ' . $e->getMessage()]);
         }
@@ -59,16 +59,6 @@ class UserController extends Controller
         }
     }
     
-    
-       // $user = User::updateOrCreate([
-                //     'googl_id' => $googleUser->id,
-                // ], [
-                //     'name' => $googleUser->name,
-                //     'email' => $googleUser->email,
-                //     'google_token' => $googleUser->token,
-                //     'google_refresh_token' => $googleUser->refreshToken,
-                // ]);
-    
     public function signIn(Request $request)
     {
         
@@ -86,7 +76,6 @@ class UserController extends Controller
                 'data' => $user->refresh(),
                 'token' => $token,
             ]);
-            // return $user;
         } else {
             return "fail";
         }
@@ -109,44 +98,56 @@ class UserController extends Controller
             'contact' => $validated['contact'],
             'password' => Hash::make($validated['password'])
         ]);
-        $token = $user->createToken("User");
-        $accessToken = $token->accessToken;
+      
         return response()->json([
-            'data' => $user->refresh(),
-            'token' => $accessToken,
+            'data' => $user->refresh()
         ]);
     }
 
 
     public function update(Request $request, User $user)
     { 
-            $user = User::find($user);
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $image = $file->getClientOriginalName();
-                $path= $request->file('image')->storeAs('public/image/profile', $image);
-                // Process the file
-            } else {
-                $image = $user->image; 
-            }
+           dd($request->all());
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'image' => 'required',
+            'contact' => 'required',
+            'subscription_plan' => 'required',
+            'about' => 'required'
+        ]);
 
-            if($user){
+        $user = User::find($user);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    
+        // Handle image upload and update the user's image field
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+    
+            // Update the user's image property
+               $user->image = $imageName;
                 $user->$request->get('name');
                 $user ->$request->get('email');
                 $user->$request->get('about');
                 $user->$request->get('subscription_plan');
                 $user ->$request->get('contact');
-                $user->image = $image;
                 $user->save();
                 return response()->json(['message' => 'user updated successfully', 'data' => $user]);
             }
+
+            return response()->json(['message' => 'Image upload failed'], 400);
         
         }
     
 
     public function profile(Request $request, User $user)
     {
-        $user = User::findOrFail($user);
+        $user = User::find($user);
         return $user;
     }
 

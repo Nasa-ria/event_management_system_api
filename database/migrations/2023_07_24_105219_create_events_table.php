@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('event');
             $table->integer('capacity');
             $table->string('details');
+            $table->string('venue');
             $table->date('date');  
             $table->time('start_time');  
             $table->time('end_time');  

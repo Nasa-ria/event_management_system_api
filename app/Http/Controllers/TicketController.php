@@ -15,12 +15,6 @@ use Picqer\Barcode\BarcodeGeneratorHTML;
 class TicketController extends Controller
 {
 
-    public function getTicket(Request $request, $id)
-    {
-        $event = Event::findorfail($id); #pass id to view
-        return "hello word";
-    }
-
     private function createTicket(Request $request)
     {
         $ticket = Ticket::create([
@@ -31,15 +25,14 @@ class TicketController extends Controller
 
     public function purchaseTicket(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'quantity' => 'required',
             'email' => 'required',
             'contact' => 'required',
             'name' => 'required', 
-            'ticket_type' => 'required|in:reguler,fixed,double'
+            'ticket_type' => 'required|in:reguler,fixed,double,VIP'
         ]);
-        // dd($request->all());
-
         // Create a new ticket and assign the attributes based on the request data
         $ticket = $this->createTicket($request);
           $payment= $request->input('price') * $request->input('quantity');
@@ -78,6 +71,7 @@ class TicketController extends Controller
 
         return response()->json(['ticket' => $ticket,'attendees'=> $attendees,'user'=>$user]);
     }
+    
     private function generateBarcode($quantity)
     {
         // Assuming you want to generate multiple barcodes based on the given quantity.

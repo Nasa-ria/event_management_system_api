@@ -22,7 +22,7 @@ class Event extends Model
           'status',
         'capacity',
         'venue',
-        'date',
+       
         
     ];
 

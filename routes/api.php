@@ -24,45 +24,32 @@ use App\Http\Controllers\RegistrationController;
 // });
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::post('eventRegistration', [EventController::class,'store'])->name('eventRegistration');
-    Route::get('getRegistration', [EventController::class,'getRegistration'])->name('getRegistration');
-    Route::post('eventpromotion', [EventController::class,'createEventPromotion'])->name('eventpromotion');
+    Route::post('event/store', [EventController::class,'store'])->name('store_event');
+    Route::put('event/update/{event}', [EventController::class,'update'])->name('update_event');
 });
 
-Route::get('calender', [EventController::class,'calender'])->name('calender');
+Route::get('events', [EventController::class,'index'])->name('events');
 Route::get('event/{id}', [EventController::class, 'events'])->name('events');
 Route::get('fetchEventsToday', [EventController::class, 'fetchEventsToday'])->name('fetchEventsToday');
 Route::get('fetchEventsYesterday', [EventController::class, 'fetchEventsYesterday'])->name('fetchEventsYesterday');
 Route::get('fetchEventsTomorrow', [EventController::class, 'fetchEventsTomorrow'])->name('fetchEventsTomorrow');
-Route::get('fetchEventsDate', [EventController::class, 'fetchEventsDate'])->name('fetchEventsDate');
+Route::get('fetchEventsDate', [EventController::class, 'fetchEventsByDate'])->name('fetchEventsDate');
+Route::get('event/singleEvent', [EventController::class,'singleEvent'])->name('singleEvent');
 
-Route::post('registration', [UserController::class,'registration'])->name('registration');
+Route::post('user/registration', [UserController::class,'registration'])->name('registration');
 Route::put('user/update/{user}', [UserController::class,'update'])->name('update');
 Route::post('signin', [UserController::class,'signIn'])->name('signin');
 Route::get('logout', [UserController::class,'logout'])->name('logout');
-Route::get('profile/{user}', [UserController::class,'profile'])->name('profile');
+Route::get('user/profile/{user}', [UserController::class,'profile'])->name('profile');
+Route::get('login/google', [UserController::class,'loginWithGoogle'])->name('loginWithGoogle');
+Route::get('login/google/callback', [UserController::class,'loginWithGoogleCallback'])->name('loginWithGoogleCallback');  
   
-Route::get('events', [TicketController::class,'events'])->name('events');
+// Route::get('events', [TicketController::class,'events'])->name('events');
+Route::get('singleEvent', [TicketController::class,'singleEvent'])->name('singleEvent');
 Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name('purchaseTicket');
-Route::get('getTicket/{id}', [TicketController::class,'getTicket'])->name('getTicket'); #make controller function
 
-
-
-// Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
-
-// ticket
-
+ 
 
 // For barcode scanning
 Route::get('/scan-ticket/{ticketCode}', [TicketController::class,'scanTicket'])->name('scanTicket');
 
-// Route::get('/generate-barcode', [ProductController::class, 'index'])->name('generate.barcode');
-#replace awesomepaymentgateway with actual payment package
-// composer require awesomepaymentgateway/awesome-sdk
-
-
-// Route::group(['middleware' => ['web','auth']], function (){
-    Route::get('login/google', [UserController::class,'loginWithGoogle'])->name('loginWithGoogle');
-    Route::get('login/google/callback', [UserController::class,'loginWithGoogleCallback'])->name('loginWithGoogleCallback');  
-//    }
-//   );

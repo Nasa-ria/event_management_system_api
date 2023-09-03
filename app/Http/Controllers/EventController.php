@@ -3,20 +3,11 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use Google_Client;
-use Google\Service;
 use App\Models\Event;
 use App\Models\Ticket;
 use App\Mail\EventMail;
-use App\Models\Feedback;
-use App\Models\TicketPrice;
-use Google\Service\Calendar;
-use Google_Service_Calendar;
+
 use Illuminate\Http\Request;
-use App\Models\Eventpromotion;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-// use App Google\Service\Calendar\Calendar;
 
 
 class EventController extends Controller
@@ -77,45 +68,53 @@ class EventController extends Controller
         ]);
     }
 
-    public function update(Request $request, $event)
+    public function update(Request $request, Event $event)
     {
         $request->validate([
-            'event' => 'required|string',
-            'details' => 'required|email',
+            'event' => 'required',
+            'details' => 'required',
             'capacity' => 'required',
-            'time' => 'required',
             'date' => 'required',
-            'ticketTypesAndPrices' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'ticketTypesAndPrices' => 'required|array'
         ]);
-
-        $event = Event::findOrFail($event);
-
+    
         $event->update([
-            'event' => $request->event,
-            'details' => $request->details,
-            'capacity' => $request->capacity,
-            'time' => $request->time,
-            'date' => $request->date,
-            'ticketTypesAndPrices' => $request->ticketTypesAndPrices
+            'event' => $request->input('event'),
+            'details' => $request->input('details'),
+            'capacity' => $request->input('capacity'),
+            'start_time' => $request->input('start_time'),
+            'end_time' => $request->input('end_time'),
+            'date' => $request->input('date'),
+            'ticketTypesAndPrices' => $request->input('ticketTypesAndPrices')
         ]);
-
-        return response()->json(['message' => 'event updated successfully', 'data' => $event]);
+    
+        return response()->json(['message' => 'Event updated successfully', 'data' => $event]);
     }
+  
+    
+    
+    
+    
+    
 
   public function destroy(Request $request,Event $event){
         $event -> delete();
         return "deleted";
   }
 
-<<<<<<< HEAD
 
-=======
   public function fetchEventsByDate(Request $request)
   
   {
-      $events = Event::whereDate('date', $targetDate)->get();
-  
-      return $events;
+    $date =$request->input('targetDate') ;
+
+      $eventdate = Event::whereDate('date',$date )->get();
+      if ($eventdate ->isEmpty()) {
+        return "No event happening today";
+    }
+      return $eventdate;
   }
 
   public function fetchEventsToday()
@@ -123,8 +122,12 @@ class EventController extends Controller
     $today= Carbon::now();
 
     $eventsToday = Event::whereDate('date', $today)->get();
-
-    return $eventsToday;
+    if ($eventsToday ->isEmpty()) {
+        return "No event happening today";
+    }
+    return$eventsToday ;
+     
+ 
 }
 
 
@@ -134,7 +137,10 @@ public function fetchEventsTomorrow()
 
     $eventstomorrow = Event::whereDate('date',  $tomorrow)->get();
 
-    return   $eventstomorrow ;
+    if ($eventstomorrow->isEmpty()) {
+        return "No event happening tomorrow";
+    }
+    return $eventstomorrow;
 }
 
 public function fetchEventsYesterday()
@@ -142,8 +148,9 @@ public function fetchEventsYesterday()
     $yesterday = Carbon::yesterday();
 
     $eventsyesterday =  Event::whereDate('date', $yesterday)->get();
-
+    if ($eventsyesterday ->isEmpty()) {
+        return "No event happening yesterday";
+    }
     return  $eventsyesterday;
 }
->>>>>>> fe20cf01f9a4cba10e4bbf2351489841ac4794f4
 }
