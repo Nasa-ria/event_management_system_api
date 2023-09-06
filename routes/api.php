@@ -53,3 +53,4 @@ Route::post('purchaseTicket', [TicketController::class,'purchaseTicket'])->name(
 // For barcode scanning
 Route::get('/scan-ticket/{ticketCode}', [TicketController::class,'scanTicket'])->name('scanTicket');
 
+Route::post('/payment', [PaymentController::class, 'payment'])->name('payment');
