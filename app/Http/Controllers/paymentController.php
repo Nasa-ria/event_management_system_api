@@ -29,27 +29,29 @@ class PaymentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            $request->session()->flash('danger', $validator->errors()->first());
-            return response()->redirectTo('/');
+            // $request->session()->flash('danger', $validator->errors()->first());
+            return $validator->errors()->first();
         }
 
         $token = $this->createToken($request);
         if (!empty($token['error'])) {
-            $request->session()->flash('danger', $token['error']);
-            return response()->redirectTo('/');
+            // $request->session()->flash('danger', $token['error']);
+            return  $token['error'];
         }
         if (empty($token['id'])) {
-            $request->session()->flash('danger', 'Payment failed.');
-            return response()->redirectTo('/');
+            // $request->session()->flash('danger', 'Payment failed.');
+            return "failed";
         }
 
         $charge = $this->createCharge($token['id'], 2000);
         if (!empty($charge) && $charge['status'] == 'succeeded') {
-            $request->session()->flash('success', 'Payment completed.');
+            return "Payment completed.";
+            // $request->session()->flash('success', 'Payment completed.');
         } else {
-            $request->session()->flash('danger', 'Payment failed.');
+            return "Payment failed";
+            // $request->session()->flash('danger', 'Payment failed.');
         }
-        return response()->redirectTo('/');
+        return "hi";
     }
 
     private function createToken($cardData)

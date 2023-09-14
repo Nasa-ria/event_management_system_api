@@ -34,5 +34,9 @@ return [
         'client_id'=>env('GOOGLE_CLIENT_ID'),
        'client_secret'=>env('GOOGLE_CLIENT_SECRET'),
        'redirect'=>'http://127.0.0.1:8000/api/login/google/callback'
-      ]
+      ],
+      'stripe' => [
+        'model'  => 'Payment',
+        'secret_key' => env('STRIPE_SECRET_KEY', null)
+    ]
 ];
